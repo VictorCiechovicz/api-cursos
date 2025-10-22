@@ -3,6 +3,7 @@ package com.apicursos.controllers;
 
 import com.apicursos.Curso;
 import com.apicursos.repository.CursoRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,7 @@ public class CursoControllers {
 
     // ✅ Deletar curso
     @DeleteMapping("/cursos/{id}")
+    @Tag(name = "Exclui curso", description = "Exclui curso de acordo com id")
     public void delete(@PathVariable Long id) {
         cursoRepository.deleteById(id);
 
@@ -60,6 +62,7 @@ public class CursoControllers {
 
     // ✅ Atualizar o status curso
     @PatchMapping("/cursos/{id}/{active}")
+    @Tag(name = "Atualizar status de curso", description = "Atualiza status de curso de acordo com id")
     public void patch(@PathVariable Long id, @PathVariable String active) {
 
         cursoRepository.findById(id).ifPresent(curso -> {
