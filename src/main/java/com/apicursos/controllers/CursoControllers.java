@@ -5,6 +5,8 @@ import com.apicursos.Curso;
 import com.apicursos.repository.CursoRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -55,9 +57,20 @@ public class CursoControllers {
     // ✅ Deletar curso
     @DeleteMapping("/cursos/{id}")
     @Tag(name = "Exclui curso", description = "Exclui curso de acordo com id")
-    public void delete(@PathVariable Long id) {
-        cursoRepository.deleteById(id);
-
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        try {
+            Long idLong = Long.parseLong(id); // valida se é numérico
+            cursoRepository.deleteById(idLong);
+            return ResponseEntity.ok("Curso excluído com sucesso!");
+        } catch (NumberFormatException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("id precisa ser numérico");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao excluir curso: " + e.getMessage());
+        }
     }
 
     // ✅ Atualizar o status curso
